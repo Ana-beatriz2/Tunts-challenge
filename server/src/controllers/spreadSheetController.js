@@ -1,5 +1,33 @@
 const sheetConfig = require("../config/spreadSheetConfig");
 
+function calculateAverageGrade(p1, p2, p3){
+    let averageGrade = (((p1 + p2 + p3) / 3) / 10);
+    return parseFloat(averageGrade.toFixed(1));
+}
+// calculates each students situation
+function calculateStudentSituation(studentsData){
+    const [classesFouls, p1, p2, p3] = studentsData;
+
+    let average = calculateAverageGrade(p1, p2, p3);
+    let situation;
+    let passingGrade = 0;
+
+    if (classesFouls > 15){
+        situation = "Reprovado por Falta";
+    } else {
+        if (average < 5) {
+            situation = "Reprovado por Nota";
+        } else if (average < 7){
+            situation = "Exame Final";
+
+            passingGrade = (10 - average).toFixed(1);
+        } else {
+            situation = "Aprovado";
+        }
+    }
+
+    return [situation, passingGrade];
+}
 
 class SpreadSheetController {
 
@@ -10,11 +38,11 @@ class SpreadSheetController {
     }
 
     // Receives an array with the situation and passing grade from the students and enters the information into the spreadsheet
-    static async insertRows(values){
+    static async insertRows(studentsValues){
         const { googleSheets, auth, spreadsheetId } = await sheetConfig.getAuthSheets();
 
         // Calculates the number of the last row, with data, in the spreadsheet 
-        const lastRowSpreadSheet = values.length + 3; 
+        const lastRowSpreadSheet = studentsValues.length + 3; 
 
         const sheetRange = "engenharia_de_software!G4:H" + lastRowSpreadSheet.toString();
 
@@ -24,7 +52,7 @@ class SpreadSheetController {
                 spreadsheetId,
                 range: sheetRange,
                 valueInputOption: "USER_ENTERED",
-                resource: { values: values }
+                resource: { values: studentsValues }
             });
 
             return "Modificação realizada com sucesso!";
@@ -33,7 +61,7 @@ class SpreadSheetController {
         }
     }
 
-    // Get the number of absences and grades for each student in the spreadsheet and retruns an array with the situation and passing grade from the students
+    // Get the number of absences and grades for each student in the spreadsheet and returns an array with the situation and passing grade from the students
     static async getStudentsData(){
         const { googleSheets, auth, spreadsheetId } = await sheetConfig.getAuthSheets();
 
@@ -47,29 +75,9 @@ class SpreadSheetController {
 
             // Generates an array only with necessary information
             const values = rows.data.values.slice(3);
-            const studentValues = values.filter(values => values.length);
+            const studentsValues = values.filter(values => values.length);
     
-            const studentsSituation = studentValues.map(values => {
-                let average = (((values[1] + values[2] + values[3]) / 3) / 10).toFixed(1);
-                let situation;
-                let passingGrade = 0;
-
-                if (values[0] > 15){
-                    situation = "Reprovado por Falta";
-                } else {
-                    if (average < 5) {
-                        situation = "Reprovado por Nota";
-                    } else if (average < 7){
-                        situation = "Exame Final";
-
-                        passingGrade = (10 - average).toFixed(1);
-                    } else {
-                        situation = "Aprovado";
-                    }
-                }
-
-                return [situation, passingGrade] 
-            });
+            const studentsSituation = studentsValues.map(values => { return calculateStudentSituation(values); });
 
             return studentsSituation;
         } catch (error){
