@@ -16,27 +16,25 @@ const sheetCredentials = {
     "universe_domain": "googleapis.com"
 }
 
-class SheetConfig {
-    static async getAuthSheets(){
-        // Create a new instance of GoogleAuth 
-        const auth = new google.auth.GoogleAuth({
-            credentials: sheetCredentials,
-            scopes: "https://www.googleapis.com/auth/spreadsheets"
-        })
+ async function getAuthSheets(){
+    // Create a new instance of GoogleAuth 
+    const auth = new google.auth.GoogleAuth({
+        credentials: sheetCredentials,
+        scopes: "https://www.googleapis.com/auth/spreadsheets"
+    })
 
-        // Obtain an authenticated client
-        const client = await auth.getClient();
+    // Obtain an authenticated client
+    const client = await auth.getClient();
 
-        // Create a new instance of Google Sheets API
-        const googleSheets = google.sheets({
-            version: "v4",
-            auth: client
-        })
+    // Create a new instance of Google Sheets API
+    const googleSheets = google.sheets({
+        version: "v4",
+        auth: client
+    })
 
-        const spreadsheetId = process.env.SPREAD_SHEET_ID;
+    const spreadsheetId = process.env.SPREAD_SHEET_ID;
 
-        return {auth, client, googleSheets, spreadsheetId};
-    }
+    return {auth, client, googleSheets, spreadsheetId};
 }
 
-module.exports = SheetConfig;
+module.exports = getAuthSheets;

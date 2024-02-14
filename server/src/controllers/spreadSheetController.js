@@ -1,4 +1,4 @@
-const sheetConfig = require("../config/spreadSheetConfig");
+const spreadSheetConfig = require("../config/spreadSheetConfig");
 
 function calculateAverageGrade(p1, p2, p3){
     let averageGrade = (((p1 + p2 + p3) / 3) / 10);
@@ -39,7 +39,7 @@ class SpreadSheetController {
 
     // Receives an array with the situation and passing grade from the students and enters the information into the spreadsheet
     static async insertRows(studentsValues){
-        const { googleSheets, auth, spreadsheetId } = await sheetConfig.getAuthSheets();
+        const { googleSheets, auth, spreadsheetId } = await spreadSheetConfig();
 
         // Calculates the number of the last row, with data, in the spreadsheet 
         const lastRowSpreadSheet = studentsValues.length + 3; 
@@ -63,7 +63,7 @@ class SpreadSheetController {
 
     // Get the number of absences and grades for each student in the spreadsheet and returns an array with the situation and passing grade from the students
     static async getStudentsData(){
-        const { googleSheets, auth, spreadsheetId } = await sheetConfig.getAuthSheets();
+        const { googleSheets, auth, spreadsheetId } = await spreadSheetConfig();
 
         try{
             const rows = await googleSheets.spreadsheets.values.get({
