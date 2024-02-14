@@ -81,7 +81,7 @@ class SpreadSheetController {
 
             return studentsSituation;
         } catch (error){
-            throw new Error(`Error picking up information: ${error.message}`);
+            throw new Error(`Error returning information: ${error.message}`);
         }
     }
 }
