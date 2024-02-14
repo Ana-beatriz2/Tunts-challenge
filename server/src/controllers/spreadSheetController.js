@@ -4,6 +4,7 @@ function calculateAverageGrade(p1, p2, p3){
     let averageGrade = (((p1 + p2 + p3) / 3) / 10);
     return parseFloat(averageGrade.toFixed(1));
 }
+
 // calculates each students situation
 function calculateStudentSituation(studentsData){
     const [classesFouls, p1, p2, p3] = studentsData;
@@ -30,7 +31,6 @@ function calculateStudentSituation(studentsData){
 }
 
 class SpreadSheetController {
-
     // Takes the information from the students and enters the result into the spreadsheet
     static async modify(){
         const studentData = await this.getStudentsData();
