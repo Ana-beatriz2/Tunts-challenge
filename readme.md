@@ -1,23 +1,23 @@
-# Desafio Tunts.Rocks 2024
+# Tunts.Rocks 2024 challenge
 
-## Sobre o Projeto
+## About the project
 
-Aplicação que deve ser capaz de ler uma planilha do google sheets, buscar as informações necessárias, calcular e escrever o resultado na planilha.
+Application that must be able to read a google sheets spreadsheet, search for the necessary information, calculate and write the result in the spreadsheet.
 
-## Como rodar
+## How to execute
 
-Alterar para o diretório utilizado
+Change the directory
 ```bash
 cd server
 ```
 
-Baixar as dependências
+Install the dependecies
 
 ```bash
 npm install ou npm i
 ```
 
-Rodar o programa
+Run the program
 ```bash
 npm start
 ```
